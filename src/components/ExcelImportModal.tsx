@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Upload, Button, Table, message, Alert, Space, Divider } from 'antd';
-import { UploadOutlined, DownloadOutlined, FileExcelOutlined } from '@ant-design/icons';
+import { UploadOutlined, DownloadOutlined } from '@ant-design/icons';
 import { ClassInfo, GradeInfo } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import * as XLSX from 'xlsx';

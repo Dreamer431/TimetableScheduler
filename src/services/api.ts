@@ -3,7 +3,7 @@ import { Course } from '../types';
 
 // 检查是否在Tauri环境中
 const isTauriEnv = () => {
-  return typeof window !== 'undefined' && window.__TAURI__ !== undefined;
+  return typeof window !== 'undefined' && (window as any).__TAURI__ !== undefined;
 };
 
 // 模拟数据存储（用于前端开发环境）
@@ -58,13 +58,13 @@ const mockApi = {
     const headers = ['ID', '课程名称', '教师', '班级', '星期', '节次', '持续节数', '教室'];
     const rows = courses.map(course => [
       course.id,
-      course.name,
-      course.teacher,
-      course.class_name,
+      course.name || '',
+      course.teacher || '',
+      course.class_name || '',
       course.day.toString(),
       course.period.toString(),
       course.duration.toString(),
-      course.room
+      course.room || ''
     ]);
 
     return [headers, ...rows].map(row => row.join(',')).join('\n');

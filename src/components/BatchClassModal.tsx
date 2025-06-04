@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, InputNumber, Button, Space, message, Divider } from 'antd';
+import { Modal, Form, Input, InputNumber, Button, Space, message } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ClassInfo, GradeInfo } from '../types';
 import { v4 as uuidv4 } from 'uuid';
@@ -107,7 +107,7 @@ const BatchClassModal: React.FC<BatchClassModalProps> = ({
     const existingNumbers = gradeClasses.map(c => c.classNumber);
     let nextNumber = 1;
     
-    const updatedTemplates = classTemplates.map((template, index) => {
+    const updatedTemplates = classTemplates.map((template) => {
       while (existingNumbers.includes(nextNumber)) {
         nextNumber++;
       }

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Card, Row, Col, Button, Typography, Badge, Divider, message } from 'antd';
+import { Card, Row, Col, Button, Typography, Badge, Divider } from 'antd';
 import { UserOutlined, HomeOutlined, BookOutlined, TeamOutlined, ExperimentOutlined } from '@ant-design/icons';
-import { Course, getUniqueValues, TimetableViewType, TimetableViewConfig } from '../types';
-import { loadDemoData } from '../utils/demoData';
+import { Course, getAllUniqueValues, TimetableViewType, TimetableViewConfig } from '../types';
 
 const { Title, Text } = Typography;
 
@@ -13,15 +12,16 @@ interface QuickTimetableAccessProps {
 }
 
 const QuickTimetableAccess: React.FC<QuickTimetableAccessProps> = ({ courses, onViewChange, onLoadDemoData }) => {
-  const { teachers, classes, subjects, rooms } = getUniqueValues(courses);
+  const { teachers, classes, subjects, rooms } = getAllUniqueValues(courses);
 
   const handleQuickAccess = (type: TimetableViewType, target: string) => {
     const titles = {
+      [TimetableViewType.ALL]: '全校课程表',
+      [TimetableViewType.OVERVIEW]: '总览',
       [TimetableViewType.CLASS]: '班级课程表',
       [TimetableViewType.TEACHER]: '教师课程表',
       [TimetableViewType.ROOM]: '教室课程表',
-      [TimetableViewType.SUBJECT]: '科目课程表',
-      [TimetableViewType.ALL]: '全校课程表'
+      [TimetableViewType.SUBJECT]: '科目课程表'
     };
 
     onViewChange({

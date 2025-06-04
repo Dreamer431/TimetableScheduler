@@ -55,12 +55,17 @@ export function generateDemoData(): Course[] {
           
           courses.push({
             id: uuidv4(),
-            name: subject,
-            teacher: teacher,
-            class_name: className,
+            subjectId: uuidv4(),
+            teacherId: uuidv4(),
+            classId: uuidv4(),
+            roomId: uuidv4(),
             day: day,
             period: period,
             duration: 1,
+            // 兼容性字段
+            name: subject,
+            teacher: teacher,
+            class_name: className,
             room: getSubjectRoom(subject, rooms)
           });
         }
@@ -87,12 +92,17 @@ export function generateDemoData(): Course[] {
           
           courses.push({
             id: uuidv4(),
-            name: subject,
-            teacher: teacher,
-            class_name: className,
+            subjectId: uuidv4(),
+            teacherId: uuidv4(),
+            classId: uuidv4(),
+            roomId: uuidv4(),
             day: day,
             period: period,
             duration: 1,
+            // 兼容性字段
+            name: subject,
+            teacher: teacher,
+            class_name: className,
             room: getSubjectRoom(subject, rooms)
           });
         }
@@ -119,12 +129,17 @@ export function generateDemoData(): Course[] {
           
           courses.push({
             id: uuidv4(),
-            name: subject,
-            teacher: teacher,
-            class_name: className,
+            subjectId: uuidv4(),
+            teacherId: uuidv4(),
+            classId: uuidv4(),
+            roomId: uuidv4(),
             day: day,
             period: period,
             duration: subject === '体育' ? 2 : 1, // 体育课2节连上
+            // 兼容性字段
+            name: subject,
+            teacher: teacher,
+            class_name: className,
             room: getSubjectRoom(subject, rooms)
           });
         }

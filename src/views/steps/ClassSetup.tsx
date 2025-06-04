@@ -9,8 +9,8 @@ import ExcelImportModal from '../../components/ExcelImportModal';
 interface ClassSetupProps {
   project: ProjectState;
   onProjectUpdate: (project: ProjectState) => void;
-  onNext: () => void;
-  onPrev: () => void;
+  onNext?: () => void;
+  onPrev?: () => void;
 }
 
 const { TabPane } = Tabs;
@@ -18,8 +18,8 @@ const { TabPane } = Tabs;
 const ClassSetup: React.FC<ClassSetupProps> = ({
   project,
   onProjectUpdate,
-  onNext,
-  onPrev
+  onNext: _onNext,
+  onPrev: _onPrev
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isExcelImportVisible, setIsExcelImportVisible] = useState(false);

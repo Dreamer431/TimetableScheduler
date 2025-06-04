@@ -161,7 +161,7 @@ class ProjectService {
   }
 
   // 生成CSV内容
-  private generateCSVContent(config: ExportConfig): string {
+  private generateCSVContent(_config: ExportConfig): string {
     const headers = ['时间', '周一', '周二', '周三', '周四', '周五'];
     const rows = [
       ['第1节', '语文', '数学', '英语', '物理', '化学'],

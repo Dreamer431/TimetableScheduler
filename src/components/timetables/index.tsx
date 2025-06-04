@@ -54,7 +54,7 @@ export const ClassTimetable: React.FC<TimetableProps> = ({ project, viewConfig }
 };
 
 // 教师课程表组件
-export const TeacherTimetable: React.FC<TimetableProps> = ({ project, viewConfig }) => (
+export const TeacherTimetable: React.FC<TimetableProps> = ({ viewConfig }) => (
   <Card title={`教师课程表 - ${viewConfig.targetId || '全部'}`}>
     <Result
       title="教师课程表"
@@ -64,7 +64,7 @@ export const TeacherTimetable: React.FC<TimetableProps> = ({ project, viewConfig
 );
 
 // 教室课程表组件
-export const RoomTimetable: React.FC<TimetableProps> = ({ project, viewConfig }) => (
+export const RoomTimetable: React.FC<TimetableProps> = ({ viewConfig }) => (
   <Card title={`教室课程表 - ${viewConfig.targetId || '全部'}`}>
     <Result
       title="教室课程表"
@@ -74,7 +74,7 @@ export const RoomTimetable: React.FC<TimetableProps> = ({ project, viewConfig })
 );
 
 // 总课程表组件
-export const MasterTimetable: React.FC<TimetableProps> = ({ project }) => (
+export const MasterTimetable: React.FC<TimetableProps> = () => (
   <Card title="总课程表">
     <Result
       title="总课程表"

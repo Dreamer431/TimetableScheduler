@@ -16,9 +16,9 @@ const SearchFiltersComponent: React.FC<SearchFiltersProps> = ({ onSearch, onClea
     const filters: SearchFilters = {};
     Object.keys(values).forEach(key => {
       if (values[key] && values[key].trim && values[key].trim() !== '') {
-        filters[key as keyof SearchFilters] = values[key];
+        (filters as any)[key] = values[key];
       } else if (values[key] && typeof values[key] === 'number') {
-        filters[key as keyof SearchFilters] = values[key];
+        (filters as any)[key] = values[key];
       }
     });
     onSearch(filters);

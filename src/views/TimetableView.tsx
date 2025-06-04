@@ -52,6 +52,7 @@ const TimetableView: React.FC<TimetableViewProps> = ({
 
   const getViewTypeTitle = (type: TimetableViewType): string => {
     const titles = {
+      [TimetableViewType.ALL]: '全校课程表',
       [TimetableViewType.OVERVIEW]: '课程表总览',
       [TimetableViewType.CLASS]: '班级课程表',
       [TimetableViewType.TEACHER]: '教师课程表',

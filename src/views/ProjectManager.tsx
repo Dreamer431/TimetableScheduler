@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, List, Modal, Form, Input, message, Space, Tag, Popconfirm } from 'antd';
+import { Card, Button, List, Modal, Form, Input, message, Tag, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, FolderOpenOutlined, CalendarOutlined } from '@ant-design/icons';
 import { ProjectState, ProjectStep, stepConfig } from '../types/';
 import { v4 as uuidv4 } from 'uuid';

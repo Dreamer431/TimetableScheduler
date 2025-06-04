@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Typography, Tag, Card } from 'antd';
-import { Course, TimetableData, dayMap, periodMap, TimetableViewConfig, TimetableViewType, filterCoursesByView, coursesToTimetableData } from '../types';
+import { Course, dayMap, periodMap, TimetableViewConfig, TimetableViewType, filterCoursesByView, coursesToTimetableData } from '../types';
 import TimetableViewSelector from './TimetableViewSelector';
 
 const { Title } = Typography;
@@ -76,7 +76,7 @@ const Timetable: React.FC<TimetableProps> = ({ courses }) => {
             <div style={{ fontSize: '12px', color: '#666' }}>
               {course.class_name}
             </div>
-            <Tag color={color} size="small" style={{ marginTop: 4 }}>
+            <Tag color={color} style={{ marginTop: 4, fontSize: '12px' }}>
               {course.room}
             </Tag>
           </Card>
@@ -121,7 +121,7 @@ const Timetable: React.FC<TimetableProps> = ({ courses }) => {
         bordered
         size="middle"
         style={{ marginBottom: '20px' }}
-        onRow={(record, index) => {
+        onRow={(_record, _index) => {
           return {
             style: { height: '100px' },
           };

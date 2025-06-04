@@ -28,13 +28,18 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, existingCourses,
     if (values.day && values.period && values.duration) {
       const tempCourse: Course = {
         id: initialValues?.id || 'temp',
+        subjectId: 'temp',
+        teacherId: 'temp',
+        classId: 'temp',
+        roomId: 'temp',
+        day: values.day,
+        period: values.period,
+        duration: values.duration,
+        // 兼容性字段
         name: values.name || '',
         teacher: values.teacher || '',
         class_name: values.class_name || '',
         room: values.room || '',
-        day: values.day,
-        period: values.period,
-        duration: values.duration,
       };
 
       const result = checkCourseConflicts(tempCourse, existingCourses);
@@ -45,7 +50,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, existingCourses,
   };
 
   // 表单值变化时验证
-  const handleValuesChange = (changedValues: any, allValues: any) => {
+  const handleValuesChange = (_changedValues: any, allValues: any) => {
     validateCourse(allValues);
   };
 
@@ -100,7 +105,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, existingCourses,
             <div>
               {validation.warnings.map((warning, index) => (
                 <div key={index} style={{ marginBottom: 4 }}>
-                  • {warning}
+                  • {warning.message}
                 </div>
               ))}
             </div>
@@ -210,7 +215,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ initialValues, existingCourses,
               type="primary"
               htmlType="submit"
               loading={isSubmitting}
-              disabled={validation && !validation.isValid}
+              disabled={validation ? !validation.isValid : false}
             >
               {initialValues ? '更新' : '添加'}
             </Button>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Steps, Card, Button, Space, message } from 'antd';
+import { Steps, Card, Button, Space } from 'antd';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { ProjectState, ProjectStep, stepConfig } from '../types/';
 

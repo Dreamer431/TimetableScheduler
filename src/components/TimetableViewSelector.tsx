@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Select, Row, Col, Typography, Tag } from 'antd';
 import { UserOutlined, HomeOutlined, BookOutlined, TeamOutlined, GlobalOutlined } from '@ant-design/icons';
-import { TimetableViewType, TimetableViewConfig, Course, getUniqueValues } from '../types';
+import { TimetableViewType, TimetableViewConfig, Course, getAllUniqueValues } from '../types';
 
 const { Title } = Typography;
 
@@ -16,7 +16,7 @@ const TimetableViewSelector: React.FC<TimetableViewSelectorProps> = ({
   currentView,
   onViewChange,
 }) => {
-  const { teachers, classes, subjects, rooms } = getUniqueValues(courses);
+  const { teachers, classes, subjects, rooms } = getAllUniqueValues(courses);
 
   const viewTypeOptions = [
     {
@@ -83,13 +83,13 @@ const TimetableViewSelector: React.FC<TimetableViewSelectorProps> = ({
   const getTargetOptions = () => {
     switch (currentView.type) {
       case TimetableViewType.CLASS:
-        return classes.map(cls => ({ value: cls, label: cls }));
+        return classes.map((cls: string) => ({ value: cls, label: cls }));
       case TimetableViewType.TEACHER:
-        return teachers.map(teacher => ({ value: teacher, label: teacher }));
+        return teachers.map((teacher: string) => ({ value: teacher, label: teacher }));
       case TimetableViewType.ROOM:
-        return rooms.map(room => ({ value: room, label: room }));
+        return rooms.map((room: string) => ({ value: room, label: room }));
       case TimetableViewType.SUBJECT:
-        return subjects.map(subject => ({ value: subject, label: subject }));
+        return subjects.map((subject: string) => ({ value: subject, label: subject }));
       default:
         return [];
     }
@@ -113,13 +113,13 @@ const TimetableViewSelector: React.FC<TimetableViewSelectorProps> = ({
     return courses.filter(course => {
       switch (currentView.type) {
         case TimetableViewType.CLASS:
-          return course.class_name === currentView.target;
+          return course.class_name === (currentView.target || currentView.targetId);
         case TimetableViewType.TEACHER:
-          return course.teacher === currentView.target;
+          return course.teacher === (currentView.target || currentView.targetId);
         case TimetableViewType.ROOM:
-          return course.room === currentView.target;
+          return course.room === (currentView.target || currentView.targetId);
         case TimetableViewType.SUBJECT:
-          return course.name === currentView.target;
+          return course.name === (currentView.target || currentView.targetId);
         default:
           return true;
       }
@@ -167,7 +167,7 @@ const TimetableViewSelector: React.FC<TimetableViewSelectorProps> = ({
               placeholder={`选择具体${getViewTypeLabel(currentView.type).replace('课程表', '')}`}
               allowClear
             >
-              {getTargetOptions().map(option => (
+              {getTargetOptions().map((option: any) => (
                 <Select.Option key={option.value} value={option.value}>
                   {option.label}
                 </Select.Option>

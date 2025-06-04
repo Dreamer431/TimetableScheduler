@@ -65,6 +65,12 @@ export interface Course {
   period: number;         // 第几节课
   duration: number;       // 持续几节课
   week?: number;          // 第几周（可选，用于单双周课程）
+
+  // 兼容性字段（用于显示）
+  name?: string;          // 课程名称
+  teacher?: string;       // 教师名称
+  class_name?: string;    // 班级名称
+  room?: string;          // 教室名称
 }
 
 // ==================== 排课配置 ====================
@@ -141,6 +147,7 @@ export enum ProjectStep {
 
 // 课程表视图类型
 export enum TimetableViewType {
+  ALL = 'all',              // 全校课程表
   OVERVIEW = 'overview',     // 总览
   CLASS = 'class',          // 班级课程表
   TEACHER = 'teacher',      // 教师课程表
@@ -152,6 +159,7 @@ export enum TimetableViewType {
 export interface TimetableViewConfig {
   type: TimetableViewType;
   targetId?: string;        // 目标ID（班级ID、教师ID等）
+  target?: string;          // 目标名称（兼容性字段）
   title: string;
 }
 
@@ -247,3 +255,164 @@ export const stepConfig: Record<ProjectStep, { title: string; description: strin
     icon: 'export'
   }
 };
+
+// ==================== 搜索和过滤 ====================
+
+// 搜索过滤器
+export interface SearchFilters {
+  keyword?: string;
+  subject?: string;
+  teacher?: string;
+  class?: string;
+  room?: string;
+  day?: number;
+  period?: number;
+}
+
+// 验证结果
+export interface ValidationResult {
+  isValid: boolean;
+  conflicts: ConflictInfo[];
+  warnings: WarningInfo[];
+}
+
+// 冲突信息
+export interface ConflictInfo {
+  type: 'time' | 'room' | 'teacher';
+  message: string;
+  courses: Course[];
+}
+
+// 警告信息
+export interface WarningInfo {
+  type: 'workload' | 'preference' | 'constraint';
+  message: string;
+}
+
+// 统计信息
+export interface Statistics {
+  totalCourses: number;
+  roomUsage: Record<string, number>;
+  roomUtilization: Record<string, number>;
+  teacherWorkload: Record<string, number>;
+  teacherCount: number;
+  classSchedule: Record<string, number>;
+  classScheduleStats: Record<string, number>;
+  classCount: number;
+  subjectDistribution: Record<string, number>;
+}
+
+// ==================== 辅助函数 ====================
+
+// 获取唯一值（单个字段）
+export function getUniqueValues(courses: Course[], field: keyof Course): string[] {
+  const values = courses.map(course => {
+    const value = course[field];
+    return typeof value === 'string' ? value : String(value);
+  });
+  return Array.from(new Set(values)).filter(Boolean);
+}
+
+// 获取所有字段的唯一值
+export function getAllUniqueValues(courses: Course[]): {
+  teachers: string[];
+  classes: string[];
+  subjects: string[];
+  rooms: string[];
+} {
+  return {
+    teachers: Array.from(new Set(courses.map(c => c.teacher).filter(Boolean))) as string[],
+    classes: Array.from(new Set(courses.map(c => c.class_name).filter(Boolean))) as string[],
+    subjects: Array.from(new Set(courses.map(c => c.name).filter(Boolean))) as string[],
+    rooms: Array.from(new Set(courses.map(c => c.room).filter(Boolean))) as string[]
+  };
+}
+
+// 过滤课程
+export function filterCourses(courses: Course[], filters: SearchFilters): Course[] {
+  return courses.filter(course => {
+    if (filters.keyword) {
+      // 这里需要根据实际的课程属性来搜索
+      // 暂时返回 true，具体实现需要根据 Course 接口调整
+      return true;
+    }
+    if (filters.day && course.day !== filters.day) return false;
+    if (filters.period && course.period !== filters.period) return false;
+    return true;
+  });
+}
+
+// 检查课程冲突
+export function checkCourseConflicts(course: Course, existingCourses: Course[]): ValidationResult {
+  const conflicts: ConflictInfo[] = [];
+  const warnings: WarningInfo[] = [];
+
+  // 检查时间冲突
+  const timeConflicts = existingCourses.filter(existing =>
+    existing.day === course.day &&
+    existing.period === course.period &&
+    existing.id !== course.id
+  );
+
+  if (timeConflicts.length > 0) {
+    conflicts.push({
+      type: 'time',
+      message: '时间冲突',
+      courses: timeConflicts
+    });
+  }
+
+  return {
+    isValid: conflicts.length === 0,
+    conflicts,
+    warnings
+  };
+}
+
+// 根据视图过滤课程
+export function filterCoursesByView(courses: Course[], config: TimetableViewConfig): Course[] {
+  if (config.type === TimetableViewType.ALL) {
+    return courses;
+  }
+
+  if (!config.targetId) {
+    return courses;
+  }
+
+  return courses.filter(course => {
+    switch (config.type) {
+      case TimetableViewType.CLASS:
+        return course.classId === config.targetId;
+      case TimetableViewType.TEACHER:
+        return course.teacherId === config.targetId;
+      case TimetableViewType.ROOM:
+        return course.roomId === config.targetId;
+      case TimetableViewType.SUBJECT:
+        return course.subjectId === config.targetId;
+      default:
+        return true;
+    }
+  });
+}
+
+// 将课程转换为课表数据
+export function coursesToTimetableData(courses: Course[], daysPerWeek: number = 7, periodsPerDay: number = 10): TimetableData {
+  const data: TimetableData = Array(periodsPerDay).fill(null).map(() =>
+    Array(daysPerWeek).fill(null)
+  );
+
+  courses.forEach(course => {
+    const dayIndex = course.day - 1; // 转换为0-based索引
+    const periodIndex = course.period - 1; // 转换为0-based索引
+
+    if (dayIndex >= 0 && dayIndex < daysPerWeek && periodIndex >= 0 && periodIndex < periodsPerDay) {
+      data[periodIndex][dayIndex] = {
+        rowSpan: course.duration || 1,
+        course,
+        isEmpty: false
+      };
+    }
+  });
+
+  return data;
+}
